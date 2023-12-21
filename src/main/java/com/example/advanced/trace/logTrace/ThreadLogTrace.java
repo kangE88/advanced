@@ -15,7 +15,6 @@ public class ThreadLogTrace implements LogTrace {
     @Override
     public TraceStatus begin(String message) {
         syncTraceId();
-//        TraceId traceId = traceIdHolder; //new TraceId();
         TraceId traceId = traceIdHolder.get();
         Long startTimeMs = System.currentTimeMillis();
         log.info("[{}] {}{}", traceId.getId(), addSpace(START_PREFIX, traceId.getLevel()), message);
@@ -60,10 +59,8 @@ public class ThreadLogTrace implements LogTrace {
     private void releaseTraceId() {
         TraceId traceId = traceIdHolder.get();
         if (traceId.isFirstLevel()) {
-//            traceIdHolder = null; //destroy
             traceIdHolder.remove(); //destroy
         } else {
-//            traceIdHolder.createPreviousId();
             traceIdHolder.set(traceId.createPreviousId());
         }
     }
